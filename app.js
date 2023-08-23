@@ -93,3 +93,20 @@ app.get('/todolist', verifyToken, async (req, res) => {
     res.status(500).json({ error: 'Error' });
   }
 });
+
+app.delete('/todolist/:id', verifyToken, async (req, res) => {
+  try {
+    const { userId } = req;
+    const { id } = req.params;
+
+    await db.promise().query('DELETE FROM todolist WHERE id = ? AND user_id = ?', [id, userId]);
+
+    res.json({ message: 'Task Berhasil Dihapus' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error' });
+  }
+});
+
+app.listen(10001, () => {
+  console.log('Server berjalan di port 10001');
+});

@@ -107,6 +107,20 @@ app.delete('/todolist/:id', verifyToken, async (req, res) => {
   }
 });
 
+app.put('/todolist/:id', verifyToken, async (req, res) => {
+  try {
+    const { userId } = req;
+    const { id } = req.params;
+    const { task, status } = req.body;
+
+    await db.promise().query('UPDATE todolist SET task = ?, status = ? WHERE id = ? AND user_id = ?', [task, status, id, userId]);
+
+    res.json({ message: 'Task Berhasil Diubah' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error' });
+  }
+});
+
 app.listen(10001, () => {
   console.log('Server berjalan di port 10001');
 });
